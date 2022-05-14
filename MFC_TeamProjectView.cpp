@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -51,12 +52,20 @@ BOOL CMFCTeamProjectView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CMFCTeamProjectView 그리기
 
-void CMFCTeamProjectView::OnDraw(CDC* /*pDC*/)
+void CMFCTeamProjectView::OnDraw(CDC* pDC)
 {
 	CMFCTeamProjectDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+
+	CBrush gray;
+	gray.CreateSolidBrush(RGB(224, 224, 224));
+	pDC->SelectObject(gray);
+
+	CRect ToolBar;
+	ToolBar = CRect(win_x / 4, 40, win_x/2+400, 130);
+	pDC->Rectangle(ToolBar);
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
@@ -103,3 +112,12 @@ CMFCTeamProjectDoc* CMFCTeamProjectView::GetDocument() const // 디버그되지 
 
 
 // CMFCTeamProjectView 메시지 처리기
+
+
+void CMFCTeamProjectView::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+	win_x = cx;
+	win_y = cy;
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
