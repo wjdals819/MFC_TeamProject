@@ -40,6 +40,11 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	
+	int win_x=0; //window 창의 x축
+	int win_y=0; //window창의 y축
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
