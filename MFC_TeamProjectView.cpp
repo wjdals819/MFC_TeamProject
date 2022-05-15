@@ -28,6 +28,10 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_SIZE()
+	ON_WM_CREATE()
+	ON_WM_DESTROY()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -66,6 +70,8 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 	CRect ToolBar;
 	ToolBar = CRect(win_x / 4, 40, win_x/2+400, 130);
 	pDC->Rectangle(ToolBar);
+
+	
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
@@ -120,4 +126,39 @@ void CMFCTeamProjectView::OnSize(UINT nType, int cx, int cy)
 	win_x = cx;
 	win_y = cy;
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+
+
+void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	dc.MoveTo(point.x, point.y);
+	MovePoint.x = point.x;
+	MovePoint.y = point.y;
+
+	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	if ((nFlags && MK_LBUTTON)==MK_LBUTTON)
+	{
+		CPen pen,*oldPen;
+		pen.CreatePen(PS_SOLID, 1, PenColor);
+		oldPen=dc.SelectObject(&pen);
+
+		dc.MoveTo(MovePoint.x, MovePoint.y);
+		dc.LineTo(point.x, point.y);
+		MovePoint.x = point.x;
+		MovePoint.y = point.y;
+
+		pen.DeleteObject();
+	}
+	
+	CView::OnMouseMove(nFlags, point);
 }
