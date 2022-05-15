@@ -49,6 +49,7 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	CPoint MovePoint;
 	COLORREF PenColor=RGB(0,0,0); // 색상 저장 변수
+	
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

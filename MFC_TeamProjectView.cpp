@@ -63,15 +63,20 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
+	//캔버스 영역을 나타내는 사각형
+	CRect Canvas_rt;
+	Canvas_rt = CRect(0, win_y, win_x, 135);
+	pDC->Rectangle(Canvas_rt);
+
+	//툴바의 바탕색
 	CBrush gray;
 	gray.CreateSolidBrush(RGB(224, 224, 224));
 	pDC->SelectObject(gray);
 
+	//툴바 구현
 	CRect ToolBar;
 	ToolBar = CRect(win_x / 4, 40, win_x/2+400, 130);
 	pDC->Rectangle(ToolBar);
-
-	
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
@@ -146,12 +151,23 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
+
+	// 브러시로 자유 곡선 그리기 구현부분
 	if ((nFlags && MK_LBUTTON)==MK_LBUTTON)
 	{
+		// 펜 설정
 		CPen pen,*oldPen;
-		pen.CreatePen(PS_SOLID, 1, PenColor);
+		pen.CreatePen(PS_SOLID, 3, PenColor);
 		oldPen=dc.SelectObject(&pen);
 
+		// 그림을 그릴 수 있는 캔버스 영역
+		CRgn DrawArea;
+		CRect DrawArea_rt;
+		DrawArea_rt = CRect(0, win_y, win_x, 135);
+		DrawArea.CreateRectRgnIndirect(DrawArea_rt);
+		dc.SelectClipRgn(&DrawArea);
+
+		//자유 곡선 그리기
 		dc.MoveTo(MovePoint.x, MovePoint.y);
 		dc.LineTo(point.x, point.y);
 		MovePoint.x = point.x;
