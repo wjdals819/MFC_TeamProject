@@ -32,6 +32,11 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_WM_DESTROY()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_SIZE_1, &CMFCTeamProjectView::BrushSize)
+	ON_COMMAND(ID_SIZE_3, &CMFCTeamProjectView::BrushSize_3)
+	ON_COMMAND(ID_SIZE_5, &CMFCTeamProjectView::Brush_Size_5)
+	ON_COMMAND(ID_SIZE_10, &CMFCTeamProjectView::Brush_Size_10)
+	ON_COMMAND(ID_SIZE_20, &CMFCTeamProjectView::Brush_Size_20)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -39,7 +44,7 @@ END_MESSAGE_MAP()
 CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-
+	Brush_Size = 1; //초기 브러시 크기
 }
 
 CMFCTeamProjectView::~CMFCTeamProjectView()
@@ -65,7 +70,7 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 
 	//캔버스 영역을 나타내는 사각형
 	CRect Canvas_rt;
-	Canvas_rt = CRect(0, win_y, win_x, 135);
+	Canvas_rt = CRect(0, win_y, win_x, 120);
 	pDC->Rectangle(Canvas_rt);
 
 	//툴바의 바탕색
@@ -75,7 +80,7 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 
 	//툴바 구현
 	CRect ToolBar;
-	ToolBar = CRect(win_x / 4, 40, win_x/2+400, 130);
+	ToolBar = CRect(win_x / 4, 20, win_x/2+400, 110);
 	pDC->Rectangle(ToolBar);
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
@@ -157,7 +162,7 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		// 펜 설정
 		CPen pen,*oldPen;
-		pen.CreatePen(PS_SOLID, 3, PenColor);
+		pen.CreatePen(PS_SOLID, Brush_Size, PenColor);
 		oldPen=dc.SelectObject(&pen);
 
 		// 그림을 그릴 수 있는 캔버스 영역
@@ -177,4 +182,34 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	
 	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CMFCTeamProjectView::BrushSize()
+{
+	Brush_Size = 1;// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::BrushSize_3()
+{
+	Brush_Size = 3;// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::Brush_Size_5()
+{
+	Brush_Size = 5;// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::Brush_Size_10()
+{
+	Brush_Size = 10;// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::Brush_Size_20()
+{
+	Brush_Size = 20;// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }

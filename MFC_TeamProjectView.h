@@ -50,6 +50,12 @@ public:
 	CPoint MovePoint;
 	COLORREF PenColor=RGB(0,0,0); // 색상 저장 변수
 	
+	afx_msg void BrushSize(); 
+	int Brush_Size; //브러시 크기를 저장하는 변수
+	afx_msg void BrushSize_3();
+	afx_msg void Brush_Size_5();
+	afx_msg void Brush_Size_10();
+	afx_msg void Brush_Size_20();
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
