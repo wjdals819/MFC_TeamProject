@@ -48,7 +48,6 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	CPoint MovePoint;
-	COLORREF PenColor=RGB(0,0,0); // 색상 저장 변수
 	
 	afx_msg void BrushSize(); 
 	int Brush_Size; //브러시 크기를 저장하는 변수
@@ -56,6 +55,13 @@ public:
 	afx_msg void Brush_Size_5();
 	afx_msg void Brush_Size_10();
 	afx_msg void Brush_Size_20();
+
+	afx_msg void OnColorchange();
+	afx_msg void OnFillcolorchange();
+	COLORREF m_colLine, m_colFill;    // 색
+	COLORREF m_colLineXor;
+	int m_nType;                    // 그리기 타입
+	CPoint m_pntOld, m_pntCur;
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

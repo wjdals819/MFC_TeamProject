@@ -37,6 +37,8 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_SIZE_5, &CMFCTeamProjectView::Brush_Size_5)
 	ON_COMMAND(ID_SIZE_10, &CMFCTeamProjectView::Brush_Size_10)
 	ON_COMMAND(ID_SIZE_20, &CMFCTeamProjectView::Brush_Size_20)
+	ON_COMMAND(ID_COLORCHANGE, &CMFCTeamProjectView::OnColorchange)
+	ON_COMMAND(ID_FILLCOLORCHANGE, &CMFCTeamProjectView::OnFillcolorchange)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -162,7 +164,7 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		// 펜 설정
 		CPen pen,*oldPen;
-		pen.CreatePen(PS_SOLID, Brush_Size, PenColor);
+		pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);
 		oldPen=dc.SelectObject(&pen);
 
 		// 그림을 그릴 수 있는 캔버스 영역
@@ -212,4 +214,25 @@ void CMFCTeamProjectView::Brush_Size_10()
 void CMFCTeamProjectView::Brush_Size_20()
 {
 	Brush_Size = 20;// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::OnColorchange()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorDialog dlg;
+	if (dlg.DoModal() == IDOK) {
+		m_colLine = dlg.GetColor();
+		m_colLineXor = (RGB(GetRValue(m_colLine), GetGValue(m_colLine), GetBValue(m_colLine)));
+	}
+}
+
+
+void CMFCTeamProjectView::OnFillcolorchange()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorDialog dlg;
+	if (dlg.DoModal() == IDOK) {
+		m_colFill = dlg.GetColor();
+	}
 }
