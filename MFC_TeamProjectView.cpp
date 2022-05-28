@@ -39,6 +39,12 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_SIZE_20, &CMFCTeamProjectView::Brush_Size_20)
 	ON_COMMAND(ID_COLORCHANGE, &CMFCTeamProjectView::OnColorchange)
 	ON_COMMAND(ID_FILLCOLORCHANGE, &CMFCTeamProjectView::OnFillcolorchange)
+	ON_WM_LBUTTONUP()
+	ON_COMMAND(ID_TYPE_SOLID, &CMFCTeamProjectView::OnTypeSolid)
+	ON_COMMAND(ID_TYPE_DASH, &CMFCTeamProjectView::OnTypeDash)
+	ON_COMMAND(ID_TYPE_DOT, &CMFCTeamProjectView::OnTypeDot)
+	ON_COMMAND(ID_TYPE_DASHDOT, &CMFCTeamProjectView::OnTypeDashdot)
+	ON_COMMAND(ID_TYPE_DASHDOTDOT, &CMFCTeamProjectView::OnTypeDashdotdot)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -47,6 +53,7 @@ CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Brush_Size = 1; //초기 브러시 크기
+	Brush_Type = 0; //초기 브러시 타입
 }
 
 CMFCTeamProjectView::~CMFCTeamProjectView()
@@ -146,9 +153,11 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
-	dc.MoveTo(point.x, point.y);
+	dc.MoveTo(MovePoint.x, MovePoint.y);
+	
 	MovePoint.x = point.x;
 	MovePoint.y = point.y;
+
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -163,14 +172,19 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 	if ((nFlags && MK_LBUTTON)==MK_LBUTTON)
 	{
 		// 펜 설정
+		LOGBRUSH lbrush;
+		lbrush.lbStyle = BS_SOLID;
+		lbrush.lbColor = m_colLine;
+		lbrush.lbHatch = 0;
 		CPen pen,*oldPen;
-		pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);
+		/*pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);*/
+		pen.CreatePen(PS_GEOMETRIC | Brush_Type, Brush_Size, &lbrush,0,0);
 		oldPen=dc.SelectObject(&pen);
 
 		// 그림을 그릴 수 있는 캔버스 영역
 		CRgn DrawArea;
 		CRect DrawArea_rt;
-		DrawArea_rt = CRect(0, win_y, win_x, 135);
+		DrawArea_rt = CRect(0, win_y, win_x, 120);
 		DrawArea.CreateRectRgnIndirect(DrawArea_rt);
 		dc.SelectClipRgn(&DrawArea);
 
@@ -180,13 +194,15 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 		MovePoint.x = point.x;
 		MovePoint.y = point.y;
 
-		pen.DeleteObject();
+
+		pen.DeleteObject();	
 	}
+
 	
 	CView::OnMouseMove(nFlags, point);
 }
 
-
+//브러시 크기를 변경하는 함수들
 void CMFCTeamProjectView::BrushSize()
 {
 	Brush_Size = 1;// TODO: 여기에 명령 처리기 코드를 추가합니다.
@@ -235,4 +251,49 @@ void CMFCTeamProjectView::OnFillcolorchange()
 	if (dlg.DoModal() == IDOK) {
 		m_colFill = dlg.GetColor();
 	}
+}
+
+
+void CMFCTeamProjectView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	MovePoint = point;
+	/*Invalidate(false);*/
+
+	CView::OnLButtonUp(nFlags, point);
+}
+
+
+void CMFCTeamProjectView::OnTypeSolid()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	Brush_Type = 0;
+}
+
+
+void CMFCTeamProjectView::OnTypeDash()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	Brush_Type = 1;
+}
+
+
+void CMFCTeamProjectView::OnTypeDot()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	Brush_Type = 2;
+}
+
+
+void CMFCTeamProjectView::OnTypeDashdot()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	Brush_Type = 3;
+}
+
+
+void CMFCTeamProjectView::OnTypeDashdotdot()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	Brush_Type = 4;
 }

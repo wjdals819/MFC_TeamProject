@@ -48,6 +48,8 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	CPoint MovePoint;
+	int Brush_Type; //브러시 타입을 저장하는 변수
+
 	
 	afx_msg void BrushSize(); 
 	int Brush_Size; //브러시 크기를 저장하는 변수
@@ -62,6 +64,12 @@ public:
 	COLORREF m_colLineXor;
 	int m_nType;                    // 그리기 타입
 	CPoint m_pntOld, m_pntCur;
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnTypeSolid();
+	afx_msg void OnTypeDash();
+	afx_msg void OnTypeDot();
+	afx_msg void OnTypeDashdot();
+	afx_msg void OnTypeDashdotdot();
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
