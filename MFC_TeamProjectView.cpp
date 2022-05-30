@@ -45,6 +45,8 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_TYPE_DOT, &CMFCTeamProjectView::OnTypeDot)
 	ON_COMMAND(ID_TYPE_DASHDOT, &CMFCTeamProjectView::OnTypeDashdot)
 	ON_COMMAND(ID_TYPE_DASHDOTDOT, &CMFCTeamProjectView::OnTypeDashdotdot)
+	ON_COMMAND(ID_COLORCHANGE_BLACK, &CMFCTeamProjectView::OnColorchangeBlack)
+	ON_COMMAND(ID_BACKGROUND_COLORCHANGE, &CMFCTeamProjectView::OnBackgroundColorchange)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -54,6 +56,7 @@ CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Brush_Size = 1; //초기 브러시 크기
 	Brush_Type = 0; //초기 브러시 타입
+	backgroundColor = RGB(255, 255, 255);
 }
 
 CMFCTeamProjectView::~CMFCTeamProjectView()
@@ -78,19 +81,13 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 		return;
 
 	//캔버스 영역을 나타내는 사각형
+	CBrush Canvas_Color;
+	Canvas_Color.CreateSolidBrush(backgroundColor);
+	pDC->SelectObject(Canvas_Color);
 	CRect Canvas_rt;
-	Canvas_rt = CRect(0, win_y, win_x, 120);
+	Canvas_rt = CRect(0, win_y, win_x, 0);
 	pDC->Rectangle(Canvas_rt);
 
-	//툴바의 바탕색
-	CBrush gray;
-	gray.CreateSolidBrush(RGB(224, 224, 224));
-	pDC->SelectObject(gray);
-
-	//툴바 구현
-	CRect ToolBar;
-	ToolBar = CRect(win_x / 4, 20, win_x/2+400, 110);
-	pDC->Rectangle(ToolBar);
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 }
@@ -184,7 +181,7 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 		// 그림을 그릴 수 있는 캔버스 영역
 		CRgn DrawArea;
 		CRect DrawArea_rt;
-		DrawArea_rt = CRect(0, win_y, win_x, 120);
+		DrawArea_rt = CRect(0, win_y, win_x, 0);
 		DrawArea.CreateRectRgnIndirect(DrawArea_rt);
 		dc.SelectClipRgn(&DrawArea);
 
@@ -296,4 +293,24 @@ void CMFCTeamProjectView::OnTypeDashdotdot()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 	Brush_Type = 4;
+}
+
+
+void CMFCTeamProjectView::OnColorchangeBlack()
+{
+	backgroundColor = RGB(0, 0, 0);
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+}
+
+
+void CMFCTeamProjectView::OnBackgroundColorchange()
+{
+	CColorDialog dlg(RGB(255,255,255));
+
+	if (dlg.DoModal() == IDOK) {
+		backgroundColor = dlg.GetColor();
+		Invalidate();
+	}
+
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }

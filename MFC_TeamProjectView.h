@@ -70,6 +70,9 @@ public:
 	afx_msg void OnTypeDot();
 	afx_msg void OnTypeDashdot();
 	afx_msg void OnTypeDashdotdot();
+	COLORREF backgroundColor; // 배경색
+	afx_msg void OnColorchangeBlack();
+	afx_msg void OnBackgroundColorchange();
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
