@@ -314,3 +314,4 @@ void CMFCTeamProjectView::OnBackgroundColorchange()
 
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
+
