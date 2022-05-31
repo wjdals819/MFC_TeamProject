@@ -21,13 +21,25 @@
 #define ID_COLORCHANGE                  32783
 #define ID_FILLCOLORCHANGE              32784
 #define ID_BUTTON32786                  32786
+#define ID_BACKGROUND_COLORCHANGE       32787
+#define ID_COLORCHANGE_WHITE            32788
+#define ID_COLORCHANGE_BLACK            32789
+#define ID_COLORCHANGE_RED              32790
+#define ID_COLORCHANGE_GREEN            32791
+#define ID_COLORCHANGE_BLUE             32792
+#define ID_ERASER_SIZE                  32793
+#define ID_SIZE_2                       32794
+#define ID_SIZE_4                       32795
+#define ID_SIZE_6                       32796
+#define ID_SIZE_11                      32797
+#define ID_SIZE_21                      32798
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32787
+#define _APS_NEXT_COMMAND_VALUE         32799
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
