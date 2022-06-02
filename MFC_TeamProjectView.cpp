@@ -47,6 +47,11 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_TYPE_DASHDOTDOT, &CMFCTeamProjectView::OnTypeDashdotdot)
 	ON_COMMAND(ID_COLORCHANGE_BLACK, &CMFCTeamProjectView::OnColorchangeBlack)
 	ON_COMMAND(ID_BACKGROUND_COLORCHANGE, &CMFCTeamProjectView::OnBackgroundColorchange)
+	ON_COMMAND(ID_DRAW_LINE, &CMFCTeamProjectView::OnDrawLine)
+	ON_COMMAND(ID_DRAW_CIRCLE, &CMFCTeamProjectView::OnDrawCircle)
+	ON_COMMAND(ID_DRAW_RECTANGLE, &CMFCTeamProjectView::OnDrawRectangle)
+	ON_COMMAND(ID_DRAW_TEXT, &CMFCTeamProjectView::OnDrawText)
+	ON_WM_CHAR()
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -87,6 +92,34 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 	CRect Canvas_rt;
 	Canvas_rt = CRect(0, win_y, win_x, 0);
 	pDC->Rectangle(Canvas_rt);
+
+	// 그리기 영역
+	switch (m_GrapghicObj.m_kind)
+
+	{
+	case LINE:
+		pDC->MoveTo(m_GrapghicObj.m_ptStart);
+		pDC->LineTo(m_GrapghicObj.m_ptEnd);
+		break;
+
+	case ELLIPES:
+		pDC->Ellipse(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
+		break;
+
+	case RECTANGLE:
+		pDC->Rectangle(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
+		break;
+
+	case TEXTBOX:
+		CRect rt = CRect(m_GrapghicObj.m_ptStart, m_GrapghicObj.m_ptEnd);
+
+		if (m_GrapghicObj.m_strText.IsEmpty())
+			pDC->SelectObject(GetStockObject(LTGRAY_BRUSH));
+		pDC->Rectangle(&rt);
+		if (!m_GrapghicObj.m_strText.IsEmpty())
+			pDC->DrawText(m_GrapghicObj.m_strText, &rt, DT_TOP | DT_LEFT);
+
+	}
 
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
@@ -155,6 +188,7 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 	MovePoint.x = point.x;
 	MovePoint.y = point.y;
 
+	m_GrapghicObj.m_ptStart = point;
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -193,6 +227,14 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 
 
 		pen.DeleteObject();	
+	}
+
+
+	if (MK_LBUTTON & nFlags)
+	{
+		m_GrapghicObj.m_ptEnd = point;
+		Invalidate();
+		//마우스의 이동의 상태와 마우스 위치를 저장
 	}
 
 	
@@ -315,3 +357,43 @@ void CMFCTeamProjectView::OnBackgroundColorchange()
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 
+
+
+void CMFCTeamProjectView::OnDrawLine()
+{
+	m_GrapghicObj.m_kind = LINE;
+}
+
+
+void CMFCTeamProjectView::OnDrawCircle()
+{
+	m_GrapghicObj.m_kind = ELLIPES;
+}
+
+
+void CMFCTeamProjectView::OnDrawRectangle()
+{
+	m_GrapghicObj.m_kind = RECTANGLE;
+}
+
+
+void CMFCTeamProjectView::OnDrawText()
+{
+	m_GrapghicObj.m_kind = TEXTBOX;
+}
+
+
+void CMFCTeamProjectView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	if (nChar == VK_BACK) {
+
+		m_GrapghicObj.m_strText.Delete(m_GrapghicObj.m_strText.GetLength() - 1);
+	}
+	else {
+		m_GrapghicObj.m_strText.AppendChar(nChar);
+	}
+	Invalidate();
+	CView::OnChar(nChar, nRepCnt, nFlags);
+}

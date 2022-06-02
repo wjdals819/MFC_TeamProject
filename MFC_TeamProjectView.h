@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "CGraphicObject.h"
 
 
 class CMFCTeamProjectView : public CView
@@ -41,6 +42,8 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
+	CGraphicObject m_GrapghicObj;
+
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	
 	int win_x=0; //window 창의 x축
@@ -73,6 +76,11 @@ public:
 	COLORREF backgroundColor; // 배경색
 	afx_msg void OnColorchangeBlack();
 	afx_msg void OnBackgroundColorchange();
+	afx_msg void OnDrawLine();
+	afx_msg void OnDrawCircle();
+	afx_msg void OnDrawRectangle();
+	afx_msg void OnDrawText();
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CGraphicObject.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFC_TeamProject.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGraphicObject.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFC_TeamProject.cpp" />
     <ClCompile Include="MFC_TeamProjectDoc.cpp" />
