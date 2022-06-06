@@ -53,6 +53,7 @@ public:
 	CPoint MovePoint;
 	int Brush_Type; //브러시 타입을 저장하는 변수
 
+
 	
 	afx_msg void BrushSize(); 
 	int Brush_Size; //브러시 크기를 저장하는 변수
@@ -81,6 +82,7 @@ public:
 	afx_msg void OnDrawRectangle();
 	afx_msg void OnDrawText();
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnBrushUsebrush();
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

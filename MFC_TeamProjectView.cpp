@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_DRAW_RECTANGLE, &CMFCTeamProjectView::OnDrawRectangle)
 	ON_COMMAND(ID_DRAW_TEXT, &CMFCTeamProjectView::OnDrawText)
 	ON_WM_CHAR()
+	ON_COMMAND(ID_BRUSH_USEBRUSH, &CMFCTeamProjectView::OnBrushUsebrush)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -62,6 +63,7 @@ CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 	Brush_Size = 1; //초기 브러시 크기
 	Brush_Type = 0; //초기 브러시 타입
 	backgroundColor = RGB(255, 255, 255);
+
 }
 
 CMFCTeamProjectView::~CMFCTeamProjectView()
@@ -92,34 +94,7 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 	CRect Canvas_rt;
 	Canvas_rt = CRect(0, win_y, win_x, 0);
 	pDC->Rectangle(Canvas_rt);
-
-	// 그리기 영역
-	switch (m_GrapghicObj.m_kind)
-
-	{
-	case LINE:
-		pDC->MoveTo(m_GrapghicObj.m_ptStart);
-		pDC->LineTo(m_GrapghicObj.m_ptEnd);
-		break;
-
-	case ELLIPES:
-		pDC->Ellipse(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
-		break;
-
-	case RECTANGLE:
-		pDC->Rectangle(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
-		break;
-
-	case TEXTBOX:
-		CRect rt = CRect(m_GrapghicObj.m_ptStart, m_GrapghicObj.m_ptEnd);
-
-		if (m_GrapghicObj.m_strText.IsEmpty())
-			pDC->SelectObject(GetStockObject(LTGRAY_BRUSH));
-		pDC->Rectangle(&rt);
-		if (!m_GrapghicObj.m_strText.IsEmpty())
-			pDC->DrawText(m_GrapghicObj.m_strText, &rt, DT_TOP | DT_LEFT);
-
-	}
+	
 
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
@@ -183,11 +158,8 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
-	dc.MoveTo(MovePoint.x, MovePoint.y);
-	
-	MovePoint.x = point.x;
-	MovePoint.y = point.y;
-
+	dc.MoveTo(MovePoint.x, MovePoint.y);	
+	MovePoint = point;
 	m_GrapghicObj.m_ptStart = point;
 
 	CView::OnLButtonDown(nFlags, point);
@@ -198,6 +170,8 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
+	m_GrapghicObj.m_ptEnd = point;
+	
 
 	// 브러시로 자유 곡선 그리기 구현부분
 	if ((nFlags && MK_LBUTTON)==MK_LBUTTON)
@@ -219,24 +193,20 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 		DrawArea.CreateRectRgnIndirect(DrawArea_rt);
 		dc.SelectClipRgn(&DrawArea);
 
-		//자유 곡선 그리기
-		dc.MoveTo(MovePoint.x, MovePoint.y);
-		dc.LineTo(point.x, point.y);
-		MovePoint.x = point.x;
-		MovePoint.y = point.y;
-
-
+		switch (m_GrapghicObj.m_kind)
+		{
+		
+		case BRUSH:
+			dc.MoveTo(MovePoint.x, MovePoint.y);
+			dc.LineTo(point.x, point.y);
+			MovePoint.x = point.x;
+			MovePoint.y = point.y;
+			break;		
+		}
+		//자유 곡선 그리기		
+		
 		pen.DeleteObject();	
 	}
-
-
-	if (MK_LBUTTON & nFlags)
-	{
-		m_GrapghicObj.m_ptEnd = point;
-		Invalidate();
-		//마우스의 이동의 상태와 마우스 위치를 저장
-	}
-
 	
 	CView::OnMouseMove(nFlags, point);
 }
@@ -297,7 +267,55 @@ void CMFCTeamProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	MovePoint = point;
-	/*Invalidate(false);*/
+	m_GrapghicObj.m_ptEnd = point;
+
+	CClientDC dc(this);
+
+	LOGBRUSH lbrush;
+	lbrush.lbStyle = BS_SOLID;
+	lbrush.lbColor = m_colLine;
+	lbrush.lbHatch = 0;
+	CPen pen, * oldPen;
+	/*pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);*/
+	pen.CreatePen(PS_GEOMETRIC | Brush_Type, Brush_Size, &lbrush, 0, 0);
+	oldPen = dc.SelectObject(&pen);
+
+	switch (m_GrapghicObj.m_kind)
+	{
+	case LINE:
+
+		dc.MoveTo(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y);
+		dc.LineTo(m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
+		dc.MoveTo(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y);
+
+		break;
+
+	case ELLIPES:
+	
+		dc.Ellipse(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
+		dc.Ellipse(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, point.x, point.y);
+
+		break;
+
+	case RECTANGLE:
+
+		dc.Rectangle(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, m_GrapghicObj.m_ptEnd.x, m_GrapghicObj.m_ptEnd.y);
+		dc.Rectangle(m_GrapghicObj.m_ptStart.x, m_GrapghicObj.m_ptStart.y, point.x, point.y);
+
+		break;
+
+	case TEXTBOX:
+
+		CRect rt = CRect(m_GrapghicObj.m_ptStart, m_GrapghicObj.m_ptEnd);
+
+		if (m_GrapghicObj.m_strText.IsEmpty())
+			dc.SelectObject(GetStockObject(LTGRAY_BRUSH));
+		dc.Rectangle(&rt);
+		if (!m_GrapghicObj.m_strText.IsEmpty())
+			dc.DrawText(m_GrapghicObj.m_strText, &rt, DT_TOP | DT_LEFT);
+		break;
+
+	}
 
 	CView::OnLButtonUp(nFlags, point);
 }
@@ -396,4 +414,11 @@ void CMFCTeamProjectView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	Invalidate();
 	CView::OnChar(nChar, nRepCnt, nFlags);
+}
+
+
+void CMFCTeamProjectView::OnBrushUsebrush()
+{
+	m_GrapghicObj.m_kind = BRUSH;
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }

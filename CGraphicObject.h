@@ -4,6 +4,8 @@
 #define ELLIPES 2
 #define RECTANGLE 3
 #define TEXTBOX 4
+#define BRUSH 5
+
 
 class CGraphicObject
 {
