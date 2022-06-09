@@ -5,6 +5,7 @@
 #define RECTANGLE 3
 #define TEXTBOX 4
 #define BRUSH 5
+#define ERASER 6
 
 
 class CGraphicObject

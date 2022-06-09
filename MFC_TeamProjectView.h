@@ -83,6 +83,17 @@ public:
 	afx_msg void OnDrawText();
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnBrushUsebrush();
+
+
+	bool m_isEraser; // 지우개 변수 추가
+	int Eraser_Size;  // 지우개 크기를 저장하는 변수
+	afx_msg void OnEraser();
+	afx_msg void OnEraser_Size();
+	afx_msg void OnEraser_Size_3();
+	afx_msg void OnEraser_Size_5();
+	afx_msg void OnEraser_Size_10();
+	afx_msg void OnEraser_Size_20();
+
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

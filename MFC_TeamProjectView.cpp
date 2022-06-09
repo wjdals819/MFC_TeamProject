@@ -53,6 +53,11 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_DRAW_TEXT, &CMFCTeamProjectView::OnDrawText)
 	ON_WM_CHAR()
 	ON_COMMAND(ID_BRUSH_USEBRUSH, &CMFCTeamProjectView::OnBrushUsebrush)
+	ON_COMMAND(ID_Eraser_Size, &CMFCTeamProjectView::OnEraser_Size)
+	ON_COMMAND(ID_Eraser_Size_3, &CMFCTeamProjectView::OnEraser_Size_3)
+	ON_COMMAND(ID_Eraser_Size_5, &CMFCTeamProjectView::OnEraser_Size_5)
+	ON_COMMAND(ID_Eraser_Size_10, &CMFCTeamProjectView::OnEraser_Size_10)
+	ON_COMMAND(ID_Eraser_Size_20, &CMFCTeamProjectView::OnEraser_Size_20)
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -62,6 +67,7 @@ CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 	// TODO: 여기에 생성 코드를 추가합니다.
 	Brush_Size = 1; //초기 브러시 크기
 	Brush_Type = 0; //초기 브러시 타입
+	Eraser_Size = 1; //초기 지우개 크기
 	backgroundColor = RGB(255, 255, 255);
 
 }
@@ -182,9 +188,7 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 		lbrush.lbColor = m_colLine;
 		lbrush.lbHatch = 0;
 		CPen pen,*oldPen;
-		/*pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);*/
-		pen.CreatePen(PS_GEOMETRIC | Brush_Type, Brush_Size, &lbrush,0,0);
-		oldPen=dc.SelectObject(&pen);
+		
 
 		// 그림을 그릴 수 있는 캔버스 영역
 		CRgn DrawArea;
@@ -197,13 +201,35 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 		{
 		
 		case BRUSH:
+
+			// 자유 곡선 그리기
+			/*pen.CreatePen(PS_SOLID, Brush_Size, m_colLine);*/
+			pen.CreatePen(PS_GEOMETRIC | Brush_Type, Brush_Size, &lbrush, 0, 0);
+			oldPen = dc.SelectObject(&pen);
+
+
 			dc.MoveTo(MovePoint.x, MovePoint.y);
 			dc.LineTo(point.x, point.y);
 			MovePoint.x = point.x;
 			MovePoint.y = point.y;
 			break;		
+
+			//지우개
+
+		case ERASER:
+			CPen pen(PS_SOLID, Eraser_Size, backgroundColor);
+			dc.SelectObject(&pen);
+			oldPen = dc.SelectObject(&pen);
+
+			dc.MoveTo(MovePoint.x, MovePoint.y);
+			dc.LineTo(point.x, point.y);
+			MovePoint.x = point.x;
+			MovePoint.y = point.y;
+
+			break;
+
 		}
-		//자유 곡선 그리기		
+			
 		
 		pen.DeleteObject();	
 	}
@@ -241,6 +267,39 @@ void CMFCTeamProjectView::Brush_Size_20()
 	Brush_Size = 20;// TODO: 여기에 명령 처리기 코드를 추가합니다.
 }
 
+// 지우개 크기를 변경하는 함수들
+void CMFCTeamProjectView::OnEraser_Size()
+{
+	m_GrapghicObj.m_kind = ERASER;
+	Eraser_Size = 1;
+}
+
+void CMFCTeamProjectView::OnEraser_Size_3()
+{
+	m_GrapghicObj.m_kind = ERASER;
+	Eraser_Size = 3;
+}
+
+
+void CMFCTeamProjectView::OnEraser_Size_5()
+{
+	m_GrapghicObj.m_kind = ERASER;
+	Eraser_Size = 5;
+}
+
+
+void CMFCTeamProjectView::OnEraser_Size_10()
+{
+	m_GrapghicObj.m_kind = ERASER;
+	Eraser_Size = 10;
+}
+
+
+void CMFCTeamProjectView::OnEraser_Size_20()
+{
+	m_GrapghicObj.m_kind = ERASER;
+	Eraser_Size = 20;
+}
 
 void CMFCTeamProjectView::OnColorchange()
 {
