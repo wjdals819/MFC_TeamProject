@@ -38,13 +38,23 @@
 #define ID_DRAW_RECTANGLE               32801
 #define ID_DRAW_TEXT                    32802
 #define ID_BRUSH_USEBRUSH               32803
+#define ID_Eraser_Size                  32804
+#define ID_Erasersize                   32804
+#define ID_Eraser_Size_3                32805
+#define ID_Erasersize3                  32805
+#define ID_Eraser_Size_5                32806
+#define ID_Erasersize5                  32806
+#define ID_Eraser_Size_10               32807
+#define ID_Erasersize10                 32807
+#define ID_Eraser_Size_20               32808
+#define ID_Erasersize20                 32808
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32804
+#define _APS_NEXT_COMMAND_VALUE         32805
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

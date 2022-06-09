@@ -52,6 +52,8 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	CPoint MovePoint;
 	int Brush_Type; //브러시 타입을 저장하는 변수
+	CString m_str;//텍스트 저장 변수
+	CRect rt;
 
 
 	
