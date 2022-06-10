@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "CGraphicObject.h"
+#include "CGraphicObject.h" //CMFC_TeamprojetView 클래스에 CGraphicObject 자료형을 선언하기 위해 포함시켜야 한다. 
 
 
 class CMFCTeamProjectView : public CView

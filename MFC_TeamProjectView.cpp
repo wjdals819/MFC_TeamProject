@@ -166,7 +166,7 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 	CClientDC dc(this);
 	dc.MoveTo(MovePoint.x, MovePoint.y);	
 	MovePoint = point;
-	m_GrapghicObj.m_ptStart = point;
+	m_GrapghicObj.m_ptStart = point; //마우스 포인터의 위치가 도형의 시작점 좌표
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -176,7 +176,7 @@ void CMFCTeamProjectView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
-	m_GrapghicObj.m_ptEnd = point;
+	m_GrapghicObj.m_ptEnd = point; //마우스가 이동중인지 확인 후 마우스의 위치를 저장
 	
 
 	// 브러시로 자유 곡선 그리기 구현부분
@@ -319,7 +319,7 @@ void CMFCTeamProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	MovePoint = point;
-	m_GrapghicObj.m_ptEnd = point;
+	m_GrapghicObj.m_ptEnd = point; //도형의 최종 좌표
 
 	CClientDC dc(this);
 
@@ -332,6 +332,7 @@ void CMFCTeamProjectView::OnLButtonUp(UINT nFlags, CPoint point)
 	pen.CreatePen(PS_GEOMETRIC | Brush_Type, Brush_Size, &lbrush, 0, 0);
 	oldPen = dc.SelectObject(&pen);
 
+	//m_GraphicObject.m_kind체 저장되어 있는 도형의 종류를 가지고 어떤 도형을 그릴지 결정한다.
 	switch (m_GrapghicObj.m_kind)
 	{
 	case LINE:
@@ -428,7 +429,7 @@ void CMFCTeamProjectView::OnBackgroundColorchange()
 
 void CMFCTeamProjectView::OnDrawLine()
 {
-	m_GrapghicObj.m_kind = LINE;
+	m_GrapghicObj.m_kind = LINE; //도형의 종류를 결정하기 위해 메크로 상수 저장
 }
 
 

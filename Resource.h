@@ -40,7 +40,7 @@
 #define ID_BRUSH_USEBRUSH               32803
 #define ID_Eraser_Size                  32804
 #define ID_Erasersize                   32804
-#define ID_Eraser_Size_3                32805
+#define ID_Eraser_Size_3                 32805
 #define ID_Erasersize3                  32805
 #define ID_Eraser_Size_5                32806
 #define ID_Erasersize5                  32806
